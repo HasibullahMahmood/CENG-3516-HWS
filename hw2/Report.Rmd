@@ -1,0 +1,351 @@
+---
+title: "Students Data Analysis"
+author: "Hasibullah Mahmood"
+date: "April 2, 2020"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+## Import the relevant libraries
+```{r}
+library(ggplot2)
+library(gridExtra)
+```  
+  
+## Load the data
+```{r}
+students <- read.csv("students.csv")
+attach(students)
+head(students)
+```  
+  
+## Some basic analysis
+```{r}
+cat("Total number of Variables:", length(students), 
+    "\nTotal number of students:", length(stud.id))
+
+```  
+  
+#### Checking summary of gender
+```{r}
+summary(gender)
+
+```  
+
+#### Analyzing Students Age
+```{r}
+summary(age)
+ggplot(data=students, aes(x=students$age)) +
+  geom_histogram(binwidth=1, col="red", fill="green", alpha=0.7)+
+  labs(title = "Students Age", x="Age", y="Count")
+```  
+
+The above figure shows most of students are between 18-25 years old.
+  
+#### Analyzing Students Height
+```{r}
+ggplot(students, aes(students$height, fill=gender)) + 
+  geom_histogram(position="identity", colour="grey40", binwidth=5) +
+  facet_grid(gender ~ .) + 
+  ggtitle("Male height vs Female height") +
+  xlab("Height") + 
+  ylab("Count")
+
+```
+
+Students height looks to be symmetric normal distribution, but in order to be sure enough we will use qqnorm and qqline functions.
+```{r}
+qqnorm(students$height, main="Q-Q plot for students height")
+qqline(students$height, col=3, lwd=2)
+```
+
+By examining the plot we can see there is divergence in upper tail and lower tail of the graph, so we will examine it further by taking the subset of data in to male and female.
+
+```{r}
+males <- subset(students, gender=="Male")
+females <- subset(students, gender=="Female")
+par(mfrow=c(1, 2))
+qqnorm(males$height, main="Q-Q plot for males height")
+qqline(males$height, col=3, lwd=2)
+
+qqnorm(females$height, main="Q-Q plot for females height")
+qqline(females$height, col=3, lwd=2)
+```
+
+Now we are sure that the height of male and female students are symmetric normal distribution, for better understanding We will have a look at summary and the standard deviation of student's heights.
+```{r}
+summary(males$height)
+sd(males$height)
+
+summary(females$height)
+sd(females$height)
+```  
+
+We can use boxplot in order to check if there is any outlier or not.
+```{r}
+ggplot(data=students, aes(x=students$gender, y=students$height, fill=students$gender)) +
+  geom_boxplot() + 
+  labs(title = "Male and Female height boxplot", x = "Gender", y="Height") +
+  stat_summary(fun.y=mean, geom="point", shape=4, size=2)
+```
+
+The above boxplot shows there are outliers both in male and female students height.
+<br>
+
+#### Analyzing Students Weight
+```{r}
+summary(males$weight)
+summary(females$weight)
+
+
+ggplot(students, aes(students$weight, fill=gender)) + 
+  geom_histogram(position="identity", colour="grey40", binwidth=5) +
+  facet_grid(gender ~ .) + 
+  ggtitle("Male weight vs Female weight") +
+  xlab("Weight") + 
+  ylab("Count")
+
+par(mfrow=c(1, 2))
+qqnorm(males$weight, main="Q-Q plot for males weight")
+qqline(males$weight, col=3, lwd=2)
+
+qqnorm(females$weight, main="Q-Q plot for females weight")
+qqline(females$weight, col=3, lwd=2)
+```
+
+The above histogram and Q-Q plot shows students weight are roughly symmetric.
+<br>
+
+#### Analyzing student's religion
+```{r}
+summary(religion)
+ggplot(students, aes(x=religion, fill=religion))+
+  geom_bar(aes(y = (..count..)/sum(..count..))) + 
+  labs(title = "Students religion BarChart",x= "Religion",y= "Count")
+
+``` 
+
+Catholic religion has the most followers between students.
+<br>
+
+#### Analyzing student's nc.Score
+```{r}
+summary(nc.score)
+
+plot1 <- ggplot(students, aes(x=nc.score)) + 
+  geom_histogram(binwidth = 0.2, colour="white", fill="#28a745") +
+  labs(title = "Students nc.score", x="NC.score", y="Count")
+
+plot2 <- ggplot(data=students, aes(x=students$gender, y=students$nc.score, fill=students$gender)) +
+  geom_boxplot() + 
+  labs(title = "Male and Female nc.score boxplot", x = "Gender", y="NC.Score") +
+  stat_summary(fun.y=mean, geom="point", shape=4, size=2)
+
+grid.arrange(plot1, plot2, ncol=2)
+
+``` 
+
+Students nc.score is asymmetric and skewed to the right
+<br>
+<br>
+
+#### Analyzing student's Semester
+```{r}
+summary(semester)
+```
+
+The summary of semester shows there is a problem in data, the 6th semester is written in two ways ">6th" and "6th".   
+The problem can be solved by the following code:
+```{r}
+students$semester[students$semester == ">6th"] <- "6th"
+summary(students$semester)
+
+ggplot(students, aes(x=semester, fill=gender))+
+  geom_bar(aes(y = (..count..)/sum(..count..))) + 
+  labs(title = "Students Semester BarChart",x= "Semester",y= "Ratio")
+```
+
+The above Barchart shows more than 60% of students are in 1st, 2nd and 3rd semesters.
+
+<br>
+
+#### Analyzing student's Major
+```{r}
+summary(students$major)
+ggplot(students, aes(x=major, fill=gender))+
+  geom_bar() + 
+  labs(title = "Students major BarChart",x= "Major",y= "Count") +
+  theme(axis.text.x=element_text(angle=-45,hjust=0,vjust=0))
+```
+
+From above graph one can easily conclude that Environmental science and Biology faculties have the most students among other, also females are more than males in Biology and Political science faculties and males are more than females in 'Economics and Finance' and 'Mathematics and statistics' faculties and ...
+
+<br>
+
+#### Analyzing student's Minor
+```{r}
+summary(students$minor)
+ggplot(students, aes(x=minor, fill=gender))+
+  geom_bar() + 
+  labs(title = "Students Minor BarChart",x= "Minor",y= "Count") +
+  theme(axis.text.x=element_text(angle=-45,hjust=0,vjust=0))
+```
+
+The above Barchart shows Students are uniformly distributed.
+
+<br>
+
+#### Analyzing student's Score1
+```{r}
+summary(students$score1)
+```
+
+The above summary shows there are 3347 Empty cells for score1. Therefore, I will take subset of students based on their major for better analyzing.
+```{r}
+students.math <- subset(students, major=="Mathematics and Statistics")
+cat("Number of students in Mathematics and Statistics faculty:",length(students.math[,1]))
+cat("Number of students who do not have score1:",length(students.math$score1[is.na(students.math$score1)]))
+
+cat("Number of students who have score1:",length(students.math$score1[!is.na(students.math$score1)]))
+
+summary(students.math$score1)
+ggplot(students.math, aes(students.math$score1, fill=students.math$gender)) + 
+  geom_histogram(position="identity", colour="grey40", binwidth=2) +
+  facet_grid(students.math$gender ~ .)+
+  labs(title="Math students score1 histogram", x ="score1", y="Count")
+
+par(mfrow=c(1, 2))
+qqnorm(students.math$score1[students.math$gender=="Male"],
+       main="Math male students score1")
+qqline(students.math$score1[students.math$gender=="Male"], col=3, lwd=2)
+
+qqnorm(students.math$score1[students.math$gender=="Female"],
+       main="Math female students score1")
+qqline(students.math$score1[students.math$gender=="Female"], col=3, lwd=2)
+```
+
+The above histogram and Q-Q plot shows students score1 is roughly symmetric and great portion of student's score1 lies between 83-91.
+
+<br>
+
+#### Analyzing student's graduated variable
+```{r}
+table(graduated)
+ggplot(students, aes(x=as.factor(graduated), fill=gender))+
+  geom_bar() + 
+  labs(title = "Students graduated variable BarChart",x= "Graduated",y= "Count")
+```
+
+The above Barchart shows most of graduated students are male and most of students who are still studying are females.
+
+<br>
+
+#### Analyzing student's Salary Variable
+```{r}
+summary(salary)
+```
+
+The summary shows there are 6486 rows in Salary variable which are empty.
+I will take the subset of students who have salary and I will plot the histogram, density histogram and qqplot of salary for further analyzing.
+```{r message=FALSE}
+students.salary <- students[!is.na(students$salary),]
+
+# Set desired binwidth and number of non-missing obs
+bw = 5000
+n_obs = sum(!is.na(students.salary$salary))
+
+g <- ggplot(students.salary, aes(x=salary)) +
+  geom_histogram(aes(y=..density..), binwidth = bw, colour="black", fill="green")+
+  stat_function(fun=dnorm, args = list(mean = mean(students.salary$salary), sd = sd(students.salary$salary))) +
+  ggtitle("Students Salary Histogram and Normal Distribution")
+
+
+ybreaks = seq(0,350,50)
+
+## On primary axis and secondary axix
+g + scale_y_continuous("Counts", breaks = round(ybreaks / (bw * n_obs),3), labels = ybreaks) +
+  scale_y_continuous("Density", sec.axis = sec_axis(
+  trans = ~ . * bw * n_obs, name = "Counts", breaks = ybreaks))
+
+qqnorm(students.salary$salary, main = "Q-Q Plot of Students Salary")
+qqline(students.salary$salary, col=3, lwd=2)
+```
+
+Students salary is symmetrically distributed and great portion of students salary lies between 40K-57K.
+<br>
+
+#### Analyzing correlation between Student's n.score and salary
+```{r}
+# define function
+correlation.analyzer <- function(data, x, y) {
+  print(
+    ggplot(data = data, aes(x = x, y = y)) +
+      geom_point(color = 'blue') +
+      geom_smooth(
+        method = lm,
+        se
+        = FALSE,
+        fullrange = TRUE,
+        col = "#C42126"
+      )
+  )
+  
+  cor.val <- cor(x, y, method = 'pearson')
+  if (cor.val > 0.7) {
+    result <- "Strong Positive Relationship"
+  } else if (cor.val > 0.3) {
+    result <- "Moderate Positive Relationship"
+  } else if (cor.val > 0) {
+    result <- "Weak Positive Relationship"
+  } else if (cor.val > -0.3) {
+    result <- "Weak Negative Relationship"
+  } else if (cor.val > -0.7) {
+    result <- "Moderate Negative Relationship"
+  } else if (cor.val >= -1) {
+    result <- "Strong Negative Relationship"
+  }
+  return(cat(
+    paste(
+      " The Correlation Coefficient: ",
+      cor.val,
+      "\n",
+      "Evaluation Result: ",
+      result,
+      "\n",
+      sep = " "
+    )
+  ))
+}
+
+
+correlation.analyzer(students.salary, 
+                     students.salary$nc.score, 
+                     students.salary$salary
+                     )
+```
+
+The figure shows there is no correlation between students n.score and salary.
+<br>
+
+#### Analyzing correlation between Student's score1 and salary
+```{r}
+
+
+correlation.analyzer(students.salary, 
+                     students.salary$score1, 
+                     students.salary$salary
+                     )
+```
+
+<br>
+
+#### Analyzing correlation between Student's score2 and salary
+```{r}
+
+
+correlation.analyzer(students.salary, 
+                     students.salary$score2, 
+                     students.salary$salary
+                     )
+```

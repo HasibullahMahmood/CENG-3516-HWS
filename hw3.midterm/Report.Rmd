@@ -1,0 +1,1113 @@
+---
+title: "Students Data Analysis"
+author: "Hasibullah Mahmood"
+date: "April 2, 2020"
+output:
+  html_document: default
+---
+
+## Import the relevant libraries
+```{r}
+library(plyr)
+library(ggplot2)
+library(gridExtra)
+```  
+  
+## Load the data
+```{r}
+students <- read.csv("students.csv")
+attach(students)
+head(students)
+```
+
+```{r}
+# Transform variables to factors with descriptive levels
+students <- transform(students,
+                     online.tutorial = as.factor(mapvalues(online.tutorial,
+                                                         c(0,1), c("no", "yes"))),
+                     graduated = as.factor(mapvalues(graduated,
+                                                        c(0,1), c("no", "yes")))
+                     )
+head(students)
+```
+  
+## Some basic analysis
+```{r}
+cat("Total number of Variables:", length(students), 
+    "\nTotal number of students:", length(stud.id))
+
+```  
+  
+#### Checking summary of gender
+```{r}
+summary(gender)
+
+```  
+
+#### Analyzing Students Age
+```{r}
+summary(age)
+ggplot(data=students, aes(x=students$age)) +
+  geom_histogram(binwidth=1, col="red", fill="green", alpha=0.7)+
+  labs(title = "Students Age", x="Age", y="Count")
+```  
+
+The above figure shows most of students are between 18-25 years old.
+  
+#### Analyzing Students Height
+```{r}
+ggplot(students, aes(students$height, fill=gender)) + 
+  geom_histogram(position="identity", colour="grey40", binwidth=5) +
+  facet_grid(gender ~ .) + 
+  ggtitle("Male height vs Female height") +
+  xlab("Height") + 
+  ylab("Count")
+
+```
+
+Students height looks to be symmetric normal distribution, but in order to be sure enough we will use qqnorm and qqline functions.
+```{r}
+qqnorm(students$height, main="Q-Q plot for students height")
+qqline(students$height, col=3, lwd=2)
+```
+
+By examining the plot we can see there is divergence in upper tail and lower tail of the graph, so we will examine it further by taking the subset of data in to male and female.
+
+```{r}
+males <- subset(students, gender=="Male")
+females <- subset(students, gender=="Female")
+par(mfrow=c(1, 2))
+qqnorm(males$height, main="Q-Q plot for males height")
+qqline(males$height, col=3, lwd=2)
+
+qqnorm(females$height, main="Q-Q plot for females height")
+qqline(females$height, col=3, lwd=2)
+```
+
+Now we are sure that the height of male and female students are symmetric normal distribution, for better understanding We will have a look at summary and the standard deviation of student's heights.
+```{r}
+summary(males$height)
+sd(males$height)
+
+summary(females$height)
+sd(females$height)
+```  
+
+We can use boxplot in order to check if there is any outlier or not.
+```{r}
+ggplot(data=students, aes(x=students$gender, y=students$height, fill=students$gender)) +
+  geom_boxplot() + 
+  labs(title = "Male and Female height boxplot", x = "Gender", y="Height") +
+  stat_summary(fun.y=mean, geom="point", shape=4, size=2)
+```
+
+The above boxplot shows there are outliers both in male and female students height.
+<br>
+
+#### Analyzing Students Weight
+```{r}
+summary(males$weight)
+summary(females$weight)
+
+
+ggplot(students, aes(students$weight, fill=gender)) + 
+  geom_histogram(position="identity", colour="grey40", binwidth=5) +
+  facet_grid(gender ~ .) + 
+  ggtitle("Male weight vs Female weight") +
+  xlab("Weight") + 
+  ylab("Count")
+
+par(mfrow=c(1, 2))
+qqnorm(males$weight, main="Q-Q plot for males weight")
+qqline(males$weight, col=3, lwd=2)
+
+qqnorm(females$weight, main="Q-Q plot for females weight")
+qqline(females$weight, col=3, lwd=2)
+```
+
+The above histogram and Q-Q plot shows students weight are roughly symmetric.
+<br>
+
+#### Analyzing student's religion
+```{r}
+summary(religion)
+ggplot(students, aes(x=religion, fill=religion))+
+  geom_bar(aes(y = (..count..)/sum(..count..))) + 
+  labs(title = "Students religion BarChart",x= "Religion",y= "Count")
+
+``` 
+
+Catholic religion has the most followers between students.
+<br>
+
+#### Analyzing student's nc.Score
+```{r}
+summary(nc.score)
+
+plot1 <- ggplot(students, aes(x=nc.score)) + 
+  geom_histogram(binwidth = 0.2, colour="white", fill="#28a745") +
+  labs(title = "Students nc.score", x="NC.score", y="Count")
+
+plot2 <- ggplot(data=students, aes(x=students$gender, y=students$nc.score, fill=students$gender)) +
+  geom_boxplot() + 
+  labs(title = "Male and Female nc.score boxplot", x = "Gender", y="NC.Score") +
+  stat_summary(fun.y=mean, geom="point", shape=4, size=2)
+
+grid.arrange(plot1, plot2, ncol=2)
+
+``` 
+
+Students nc.score is asymmetric and skewed to the right
+<br>
+<br>
+
+#### Analyzing student's Semester
+```{r}
+summary(semester)
+```
+
+The summary of semester shows there is a problem in data, the 6th semester is written in two ways ">6th" and "6th".   
+The problem can be solved by the following code:
+```{r}
+students$semester[students$semester == ">6th"] <- "6th"
+summary(students$semester)
+
+ggplot(students, aes(x=semester, fill=gender))+
+  geom_bar(aes(y = (..count..)/sum(..count..))) + 
+  labs(title = "Students Semester BarChart",x= "Semester",y= "Ratio")
+```
+
+The above Barchart shows more than 60% of students are in 1st, 2nd and 3rd semesters.
+
+<br>
+
+#### Analyzing student's Major
+```{r}
+summary(students$major)
+ggplot(students, aes(x=major, fill=gender))+
+  geom_bar() + 
+  labs(title = "Students major BarChart",x= "Major",y= "Count") +
+  theme(axis.text.x=element_text(angle=-45,hjust=0,vjust=0))
+```
+
+From above graph one can easily conclude that Environmental science and Biology faculties have the most students among other, also females are more than males in Biology and Political science faculties and males are more than females in 'Economics and Finance' and 'Mathematics and statistics' faculties and ...
+
+<br>
+
+#### Analyzing student's Minor
+```{r}
+summary(students$minor)
+ggplot(students, aes(x=minor, fill=gender))+
+  geom_bar() + 
+  labs(title = "Students Minor BarChart",x= "Minor",y= "Count") +
+  theme(axis.text.x=element_text(angle=-45,hjust=0,vjust=0))
+```
+
+The above Barchart shows Students are uniformly distributed.
+
+<br>
+
+#### Analyzing student's Score1
+```{r}
+summary(students$score1)
+```
+
+The above summary shows there are 3347 Empty cells for score1. Therefore, I will take subset of students based on their major for better analyzing.
+```{r}
+students.math <- subset(students, major=="Mathematics and Statistics")
+cat("Number of students in Mathematics and Statistics faculty:",length(students.math[,1]))
+cat("Number of students who do not have score1:",length(students.math$score1[is.na(students.math$score1)]))
+
+cat("Number of students who have score1:",length(students.math$score1[!is.na(students.math$score1)]))
+
+summary(students.math$score1)
+ggplot(students.math, aes(students.math$score1, fill=students.math$gender)) + 
+  geom_histogram(position="identity", colour="grey40", binwidth=2) +
+  facet_grid(students.math$gender ~ .)+
+  labs(title="Math students score1 histogram", x ="score1", y="Count")
+
+par(mfrow=c(1, 2))
+qqnorm(students.math$score1[students.math$gender=="Male"],
+       main="Math male students score1")
+qqline(students.math$score1[students.math$gender=="Male"], col=3, lwd=2)
+
+qqnorm(students.math$score1[students.math$gender=="Female"],
+       main="Math female students score1")
+qqline(students.math$score1[students.math$gender=="Female"], col=3, lwd=2)
+```
+
+The above histogram and Q-Q plot shows students score1 is roughly symmetric and great portion of student's score1 lies between 83-91.
+
+<br>
+
+#### Analyzing student's graduated variable
+```{r}
+table(graduated)
+ggplot(students, aes(x=as.factor(graduated), fill=gender))+
+  geom_bar() + 
+  labs(title = "Students graduated variable BarChart",x= "Graduated",y= "Count")
+```
+
+The above Barchart shows most of graduated students are male and most of students who are still studying are females.
+
+<br>
+
+#### Analyzing student's Salary Variable
+```{r}
+summary(salary)
+```
+
+The summary shows there are 6486 rows in Salary variable which are empty.
+I will take the subset of students who have salary and I will plot the histogram, density histogram and qqplot of salary for further analyzing.
+```{r message=FALSE}
+students.salary <- students[!is.na(students$salary),]
+
+# Set desired binwidth and number of non-missing obs
+bw = 5000
+n_obs = sum(!is.na(students.salary$salary))
+
+g <- ggplot(students.salary, aes(x=salary)) +
+  geom_histogram(aes(y=..density..), binwidth = bw, colour="black", fill="green")+
+  stat_function(fun=dnorm, args = list(mean = mean(students.salary$salary), sd = sd(students.salary$salary))) +
+  ggtitle("Students Salary Histogram and Normal Distribution")
+
+
+ybreaks = seq(0,350,50)
+
+## On primary axis and secondary axix
+g + scale_y_continuous("Counts", breaks = round(ybreaks / (bw * n_obs),3), labels = ybreaks) +
+  scale_y_continuous("Density", sec.axis = sec_axis(
+  trans = ~ . * bw * n_obs, name = "Counts", breaks = ybreaks))
+
+qqnorm(students.salary$salary, main = "Q-Q Plot of Students Salary")
+qqline(students.salary$salary, col=3, lwd=2)
+```
+
+Students salary is symmetrically distributed and great portion of students salary lies between 40K-57K.
+<br>
+
+#### Analyzing correlation between Student's n.score and salary
+```{r}
+# define function
+correlation.analyzer <- function(data, x, y) {
+  print(
+    ggplot(data = data, aes(x = x, y = y)) +
+      geom_point(color = 'blue') +
+      geom_smooth(
+        method = lm,
+        se
+        = FALSE,
+        fullrange = TRUE,
+        col = "#C42126"
+      )
+  )
+  
+  cor.val <- cor(x, y, method = 'pearson')
+  if (cor.val > 0.7) {
+    result <- "Strong Positive Relationship"
+  } else if (cor.val > 0.3) {
+    result <- "Moderate Positive Relationship"
+  } else if (cor.val > 0) {
+    result <- "Weak Positive Relationship"
+  } else if (cor.val > -0.3) {
+    result <- "Weak Negative Relationship"
+  } else if (cor.val > -0.7) {
+    result <- "Moderate Negative Relationship"
+  } else if (cor.val >= -1) {
+    result <- "Strong Negative Relationship"
+  }
+  return(cat(
+    paste(
+      " The Correlation Coefficient: ",
+      cor.val,
+      "\n",
+      "Evaluation Result: ",
+      result,
+      "\n",
+      sep = " "
+    )
+  ))
+}
+
+
+correlation.analyzer(students.salary, 
+                     students.salary$nc.score, 
+                     students.salary$salary
+                     )
+```
+
+The figure shows there is no correlation between students n.score and salary.
+<br>
+
+#### Analyzing correlation between Student's score1 and salary
+```{r}
+
+
+correlation.analyzer(students.salary, 
+                     students.salary$score1, 
+                     students.salary$salary
+                     )
+```
+
+<br>
+
+#### Analyzing correlation between Student's score2 and salary
+```{r}
+
+
+correlation.analyzer(students.salary, 
+                     students.salary$score2, 
+                     students.salary$salary
+                     )
+```
+
+```{r}
+# Remove unnecessary variables
+rm(g, plot1, plot2, students.math, students.salary, bw, n_obs, ybreaks, correlation.analyzer)
+```
+
+#### 2. (10p) Find confidence intervals for nc.score, score1 and score2 evaluating the differences based on gender. Use gglot2 to plot the corresponding confidence intervals to support your evaluations.
+
+Let's start by calculating confidence interval for numerous clauses of students based on gender.
+```{r}
+# calculating confidence interval for male students nc.score
+x <- t.test(males$nc.score)$conf.int
+x
+
+```
+
+The above output indicates that the true average of numerous clauses for male students is between 2.16 and 2.21 with 95% confidence.
+
+```{r}
+# calculating confidence interval for females nc.score
+y <- t.test(females$nc.score)$conf.int
+y
+```
+
+Also the above output indicates that the true average of numerous clauses for female students is between 2.12 and 2.17 with 95% confidence.
+
+To conclude, there is very less overlap between males and females numerous clauses and it's a clue that the difference is probably not statistically significant. However, we need to perform statistical test to draw a conclusion.
+
+Here is how it looks like when we visualize it.
+```{r}
+students.nc.score <- data.frame(gender="Male",
+                                scoreType="nc.score", 
+                                mean=mean(males$nc.score), 
+                                lower=x[1], 
+                                upper=x[2])
+
+students.nc.score <- rbind(students.nc.score, data.frame(gender="Female",
+                                scoreType="nc.score", 
+                                mean=mean(females$nc.score), 
+                                lower=y[1], 
+                                upper=y[2]))
+
+ggplot(students.nc.score, aes(x=scoreType, y=mean, fill=gender)) +
+  geom_bar(position="dodge", stat="identity", width = 0.3) +
+  scale_y_discrete(limit=c(seq(1, 2.5))) +
+  geom_errorbar(aes(ymin=lower, ymax=upper),
+                width=.1, # Width of the error bars
+                position=position_dodge(0.3))
+```
+
+Now let's calculate confidence interval for score1 of students based on gender.
+```{r}
+males.score1 = subset(males, !is.na(score1))
+females.score1 = subset(females, !is.na(score1))
+
+# calculating confidence interval for male students score1
+x <- t.test(males.score1$score1)$conf.int
+x
+
+```
+
+The above output indicates that the true average of score1 for male students is between 70.65 and 71.68 with 95% confidence.
+
+```{r}
+# calculating confidence interval for female students score1
+y <- t.test(females.score1$score1)$conf.int
+y
+```
+
+Also the above output indicates that the true average of score1for female students is between 64.11 and 65.26 with 95% confidence.
+
+To conclude, It looks there is no overlap between males and females score1 confidence interval and it's a clue that the difference may be significant, but we cannot be sure. We must to perform statistical test to draw a conclusion.
+
+Here is how it looks like when we visualize it.
+```{r}
+students.score1 <- data.frame(gender="Male",
+                                scoreType="score1", 
+                                mean=mean(males.score1$score1), 
+                                lower=x[1], 
+                                upper=x[2])
+
+students.score1 <- rbind(students.score1, data.frame(gender="Female",
+                                scoreType="score1", 
+                                mean=mean(females.score1$score1), 
+                                lower=y[1], 
+                                upper=y[2]))
+
+ggplot(students.score1, aes(x=scoreType, y=mean, fill=gender)) +
+  geom_bar(position="dodge", stat="identity", width = 0.3) +
+  geom_errorbar(aes(ymin=lower, ymax=upper),
+                width=.1, # Width of the error bars
+                position=position_dodge(0.3))
+```
+
+
+###############
+Lastly, let's calculate confidence interval for score2 of students based on gender.
+```{r}
+males.score2 = subset(males, !is.na(score2))
+females.score2 = subset(females, !is.na(score2))
+
+# calculating confidence interval for male students score1
+x <- t.test(males.score2$score2)$conf.int
+x
+
+```
+
+The above output indicates that the true average of score2 for male students is between 71.86 and 72.93 with 95% confidence.
+
+```{r}
+# calculating confidence interval for female students score1
+y <- t.test(females.score2$score2)$conf.int
+y
+```
+
+Also the above output indicates that the true average of score2 for female students is between 65.55 and 66.72 with 95% confidence.
+
+To conclude, It looks again there is no overlap between males and females score2 confidence interval and it's a clue that the difference may be significant, but we cannot be sure. We must to perform statistical test to draw a conclusion.
+
+Here is how it looks like when we visualize it.
+```{r}
+students.score2 <- data.frame(gender="Male",
+                                scoreType="score2", 
+                                mean=mean(males.score2$score2), 
+                                lower=x[1], 
+                                upper=x[2])
+
+students.score2 <- rbind(students.score2, data.frame(gender="Female",
+                                scoreType="score2", 
+                                mean=mean(females.score2$score2), 
+                                lower=y[1], 
+                                upper=y[2]))
+
+ggplot(students.score2, aes(x=scoreType, y=mean, fill=gender)) +
+  geom_bar(position="dodge", stat="identity", width = 0.3) +
+  geom_errorbar(aes(ymin=lower, ymax=upper),
+                width=.1, # Width of the error bars
+                position=position_dodge(0.3))
+```
+
+
+```{r echo=FALSE}
+rm(males.score1, males.score2, females.score1, females.score2, x, y)
+rm(students.nc.score, students.score1, students.score2)
+```
+#### 3. (10p) Find confidence intervals for salary evaluate the differences based on gender, religion and major. Use gglot2 to plot the corresponding confidence intervals to support your evaluations.
+
+In order to find confidence interval of salary for students based on gender, first we need to get the subset of male and female students who have salary. Then we will calculate confidence interval.
+```{r}
+# Get the subset of males and females students where its salary is not null
+males.salary = subset(males, !is.na(salary))
+females.salary = subset(females, !is.na(salary))
+
+# calculating confidence interval for male students salary
+x <- t.test(males.salary$salary)$conf.int
+x
+
+```
+
+The above output indicates that the true average of salary for male students is between 46007 and 47161 with 95% confidence.
+
+```{r}
+# calculating confidence interval for female students salary
+y <- t.test(females.salary$salary)$conf.int
+y
+```
+
+Also the above output indicates that the true average of salary for female students is between 35433 and 36603 with 95% confidence.
+
+To conclude, It looks there is no overlap between males and females salary confidence interval and it's a clue that the difference may be significant, but we cannot be sure. We must to perform statistical test to draw a conclusion.
+
+Here is how it looks like when we visualize it.
+```{r}
+students.salary <- data.frame(gender="Male",
+                                mean=mean(males.salary$salary), 
+                                lower=x[1], 
+                                upper=x[2])
+
+students.salary <- rbind(students.salary, data.frame(gender="Female",
+                                mean=mean(females.salary$salary), 
+                                lower=y[1], 
+                                upper=y[2]))
+
+ggplot(students.salary, aes(x=gender, y=mean, fill=gender)) +
+  geom_bar(position="dodge", stat="identity", width = 0.3) +
+  geom_errorbar(aes(ymin=lower, ymax=upper),
+                width=.1, # Width of the error bars
+                position=position_dodge(0.1))
+```
+
+```{r echo=FALSE}
+rm(females.salary, males.salary, position, students.salary, x, y)
+```
+
+
+Now we will calculate confidence interval for students salary based on religion.
+```{r}
+# Get the subset of students who have salary
+students.salary <- subset(students, !is.na(salary))
+
+# Get the subset of students whose religion is Catholic
+students.catholic <- subset(students.salary, religion=="Catholic")
+
+# calculating confidence interval for Catholic students salary
+a <- t.test(students.catholic$salary)$conf.int
+a
+
+```
+
+The above output indicates that the true average of salary for Catholic students is between 41888 and 43495 with 95% confidence.
+
+```{r}
+# Get the subset of students whose religion is Muslim
+students.muslim <- subset(students.salary, religion=="Muslim")
+
+# calculating confidence interval for Muslim students salary
+b <- t.test(students.muslim$salary)$conf.int
+b
+```
+
+Also the above output indicates that the true average of salary for Muslim students is between 38335 and 42584 with 95% confidence.
+
+
+```{r}
+
+# Get the subset of students whose religion is Orthodox
+students.orthodox <- subset(students.salary, religion=="Orthodox")
+
+# calculating confidence interval for Orthodox students salary
+c <- t.test(students.orthodox$salary)$conf.int
+c
+```
+
+Further more, the above output indicates that the true average of salary for Orthodox students is between 40207 and 43850 with 95% confidence.
+
+```{r}
+
+# Get the subset of students whose religion is Protestant
+students.protestant <- subset(students.salary, religion=="Protestant")
+
+# calculating confidence interval for Protestant students salary
+d <- t.test(students.protestant$salary)$conf.int
+d
+```
+
+Further more, the above output indicates that the true average of salary for Protestant students is between 41890 and 44036 with 95% confidence.
+
+```{r}
+
+# Get the subset of students whose religion is Other
+students.other <- subset(students.salary, religion=="Other")
+
+# calculating confidence interval for students salary whose religion is other
+e <- t.test(students.other$salary)$conf.int
+e
+```
+
+Further more, the above output indicates that the true average of salary for students whose religion is other, is between 41509 and 43235 with 95% confidence.
+
+To conclude, It looks there is overlap on confidence interval between students salary based on religion and it's a clue that the difference is not statistically significant. We must actually perform a statistical test to draw a conclusion.
+
+Here is how it looks like when we visualize it.
+```{r}
+students.salary <- data.frame(religion="Catholic",
+                                mean=mean(students.catholic$salary), 
+                                lower=a[1], 
+                                upper=a[2])
+
+students.salary <- rbind(students.salary, data.frame(religion="Muslim",
+                                mean=mean(students.muslim$salary), 
+                                lower=b[1], 
+                                upper=b[2]))
+
+students.salary <- rbind(students.salary, data.frame(religion="Orthodox",
+                                mean=mean(students.orthodox$salary), 
+                                lower=c[1], 
+                                upper=c[2]))
+
+students.salary <- rbind(students.salary, data.frame(religion="Protestant",
+                                mean=mean(students.protestant$salary), 
+                                lower=d[1], 
+                                upper=d[2]))
+
+students.salary <- rbind(students.salary, data.frame(religion="Other",
+                                mean=mean(students.other$salary), 
+                                lower=e[1], 
+                                upper=e[2]))
+
+ggplot(students.salary, aes(x=religion, y=mean, fill=religion)) +
+  geom_bar(position="dodge", stat="identity", width = 0.3) +
+  geom_errorbar(aes(ymin=lower, ymax=upper),
+                width=.1, # Width of the error bars
+                position=position_dodge(0.1))
+```
+
+```{r echo=FALSE}
+rm(a, b, c, d, e, students.catholic, students.muslim, students.orthodox,
+   students.other, students.protestant, students.salary)
+```
+
+#### Salary based on major
+
+Lastly, let's calculate confidence interval for salary based on major.
+```{r}
+# Get the subset of students who have salary
+students.salary <- subset(students, !is.na(salary))
+
+# Get the subset of students whose major is Biology
+students.biology <- subset(students.salary, major=="Biology")
+
+# calculating confidence interval for Biology students salary
+a <- t.test(students.biology$salary)$conf.int
+a
+
+```
+
+The above output indicates that the true average of salary for Biology students is between 46988 and 48897 with 95% confidence.
+
+```{r}
+# Get the subset of students whose major is Economics and Finance
+students.economics <- subset(students.salary, major=="Economics and Finance")
+
+# calculating confidence interval for Economics and Finance students salary
+b <- t.test(students.economics$salary)$conf.int
+b
+```
+
+Also the above output indicates that the true average of salary for Economics and Finance students is between 48722 and 50669 with 95% confidence.
+
+
+```{r}
+
+# Get the subset of students whose major is Environmental Sciences
+students.environ <- subset(students.salary, major=="Environmental Sciences")
+
+# calculating confidence interval for Environmental Sciences students salary
+c <- t.test(students.environ$salary)$conf.int
+c
+```
+
+Further more, the above output indicates that the true average of salary for Environmental Sciences students is between 37048 and 38257 with 95% confidence.
+
+```{r}
+
+# Get the subset of students whose major is Mathematics and statistics
+students.math <- subset(students.salary, major=="Mathematics and Statistics")
+
+# calculating confidence interval for Environmental Sciences students salary
+d <- t.test(students.math$salary)$conf.int
+d
+```
+
+Further more, the above output indicates that the true average of salary for Mathematics and statistics students is between 47474 and 49414 with 95% confidence.
+
+```{r}
+
+# Get the subset of students whose major is Political Science
+students.politics <- subset(students.salary, major=="Political Science")
+
+# calculating confidence interval for students salary whose major is Political Science
+e <- t.test(students.politics$salary)$conf.int
+e
+```
+
+Further more, the above output indicates that the true average of salary for Political Science students is between 35322 and 37457 with 95% confidence.
+
+```{r}
+
+# Get the subset of students whose major is Social Sciences
+students.social <- subset(students.salary, major=="Social Sciences")
+
+# calculating confidence interval for students salary whose major is Political Science
+f <- t.test(students.social$salary)$conf.int
+f
+```
+
+Further more, the above output indicates that the true average of salary for Political Science students is between 31191 and 32896 with 95% confidence.
+
+To conclude, it looks there are overlap on confidence interval between Biology, 'Economics and Finance' and 'Mathematics and statistics'. It's a clue that the difference is not statistically significant between them. However, we must actually perform a statistical test to draw a conclusion.
+
+Also there is overlap on confidence interval between Environmental and Political science. It's also a clue that the difference is not statistically significant and we must actually perform a statistical test to draw a conclusion.
+
+Moreover, there is no overlap on confidence interval between Social science and other majors. It's a clue that the difference may be significant, but we cannot be sure.  We must actually perform a statistical test to draw a conclusion.
+
+Here is how it looks like when we visualize it.
+```{r}
+students.salary <- data.frame(Major="Biology",
+                                mean=mean(students.biology$salary), 
+                                lower=a[1], 
+                                upper=a[2])
+
+students.salary <- rbind(students.salary, data.frame(Major="Economics and Finance",
+                                mean=mean(students.economics$salary), 
+                                lower=b[1], 
+                                upper=b[2]))
+
+students.salary <- rbind(students.salary, data.frame(Major="Environmental Sciences",
+                                mean=mean(students.environ$salary), 
+                                lower=c[1], 
+                                upper=c[2]))
+
+students.salary <- rbind(students.salary, data.frame(Major="Mathematics and Statistics",
+                                mean=mean(students.math$salary), 
+                                lower=d[1], 
+                                upper=d[2]))
+
+students.salary <- rbind(students.salary, data.frame(Major="Political Science",
+                                mean=mean(students.politics$salary), 
+                                lower=e[1], 
+                                upper=e[2]))
+
+students.salary <- rbind(students.salary, data.frame(Major="Social Science",
+                                mean=mean(students.social$salary), 
+                                lower=f[1], 
+                                upper=f[2]))
+
+ggplot(students.salary, aes(x=Major, y=mean, fill=Major)) +
+  geom_bar(position="dodge", stat="identity", width = 0.3) +
+  geom_errorbar(aes(ymin=lower, ymax=upper),
+                width=.1, # Width of the error bars
+                position=position_dodge(0.1)) +
+  theme(axis.text.x=element_text(angle=-45,hjust=0,vjust=0))
+```
+
+```{r echo=FALSE}
+rm(a, b, c, d, e, f, students.salary)
+rm(students.biology, students.economics, students.environ, students.math)
+rm(students.politics, students.social)
+```
+
+#### 4. (10p) Create one sample hypothesis for mean salary and score1 for women and test it in 95% confidence level.
+
+##### One sample hypothesis for mean of female students salary
+
+Let's test if true average of female students salary is less than 35000
+So the hypothesis is formulated as following:
+H0: mu = 35000
+Ha: mu < 35000
+
+The data are continues, and we assume the sample is a simple random sample.
+As the sample size is large enough the normality assumption is not important but for the sake of information we will assess the normality of the data.
+In order to assess normality of data, we can use qqplot and shampiro test.
+```{r}
+# Get subset of female students who have salary
+females.salary = subset(females, !is.na(salary))
+
+shapiro.test(females.salary$salary)
+
+```
+As the p-value > 0.05, the null hypothesis is not rejected, so data is normally distributed.
+
+Let's visualize it using Q-Q Plot.
+```{r}
+
+qqnorm(females.salary$salary, ylab = "Females Salary")
+qqline(females.salary$salary)
+```
+
+Now it is time to test the hypothesis.
+```{r}
+t.test(females.salary$salary, 
+       alternative = "less", 
+       mu=35000, 
+       conf.level = 0.95)
+```
+
+To conclude, as p-value = 0.9997 is greater than 0.05, the null hypothesis is not rejected. The confidence interval is between -infinity and 36508 with 95% confident.
+
+```{r echo=FALSE}
+rm(females.salary)
+```
+##### One sample hypothesis for female students score1
+
+Let's test that the true average of female students score1 is not equal 64
+So the hypothesis is formulated as following:
+H0: mu = 64
+Ha: mu != 64
+
+The data are continues, and we assume the sample is a simple random sample.
+As the sample size is large enough the normality assumption is not important but for the sake of information we will assess the normality.
+In order to assess normality of data, we can use qqplot and shampiro test.
+```{r}
+# Get subset of female students who have score1
+females.score1 = subset(females, !is.na(score1))$score1
+
+shapiro.test(females.score1)
+
+```
+As the p-value < 0.05, the null hypothesis is rejected, so data is not normally distributed.
+
+Let's visualize it using Q-Q Plot.
+```{r}
+
+qqnorm(females.score1, ylab = "Females score1")
+qqline(females.score1)
+```
+
+Now it is time to test the hypothesis.
+```{r}
+t.test(females.score1, 
+       alternative = "two.sided", 
+       mu=64, 
+       conf.level = 0.95)
+```
+
+To conclude, as p-value = 0.01861 is smaller than 0.05, the null hypothesis is rejected. The confidence interval is between 64.11 and 65.26 with 95% confident.
+
+```{r echo=FALSE}
+rm(females.score1)
+```
+#### 5. (10p) Create two sample hypothesis for mean salary and score1 using gender as the grouping factor and test it in 95% confidence level.
+
+##### Two sample hypothesis for salary based on gender
+
+To start, it always helps to plot things!!!
+```{r}
+# Get subset of students who have salary
+sdata <- subset(students, !is.na(salary))
+
+# Create boxplot showing how salaries varies based on gender
+qplot(x = gender, y = salary,
+      geom = "boxplot", data = sdata,
+      xlab = "Gender",
+      ylab = "Salary",
+      fill = I("lightblue"))
+```
+
+This plot suggests that gender is associated with salary.
+
+Let's compute a summary table
+```{r}
+aggregate(salary ~ gender, 
+          data = sdata,
+          FUN = function(x) {c(mean = mean(x),
+                               se = sd(x) / sqrt(length(x)))})
+
+```
+
+This difference is looking quite significant.
+
+Let's visualize it.
+```{r}
+# Density plots
+qplot(fill = gender, 
+      x = salary, 
+      data = sdata, 
+      geom = "density",
+      alpha = I(0.5),
+      adjust = 2
+      )
+```
+
+Let's check if the populations have the same variance.
+```{r}
+
+x <- subset(sdata, gender=="Male")$salary
+y <- subset(sdata, gender=="Female")$salary
+var.test(x, y)
+```
+As p-value < 0.05, the null hypothesis is rejected and the variances are not equal.  
+  
+Checking assumptions:
+  The two samples are random and independent.
+  As the sample size is large enough, normality is not important.
+  The variances are not the equal.
+
+```{r}
+t.test(x=x, y=y, alternative = "two.sided", var.equal = FALSE,
+       conf.level = 0.95)
+```
+
+To conclude, as p-value < 0.05, the null hypothesis is rejected.
+We can conclude that there is statistically significant difference between male and female students salary.
+
+```{r}
+rm(females, males, sdata, x, y)
+```
+
+
+##### Two sample hypothesis for score1 based on gender
+
+To start, it always helps to plot things!!!
+```{r}
+# Get subset of students who have score1
+sdata <- subset(students, !is.na(score1))
+
+# Create boxplot showing how score1 varies based on gender
+qplot(x = gender, y = score1,
+      geom = "boxplot", data = sdata,
+      xlab = "Gender",
+      ylab = "Score1",
+      fill = I("lightblue"))
+```
+
+This plot suggests that gender is associated with score1.
+
+Let's compute a summary table
+```{r}
+aggregate(salary ~ gender, 
+          data = sdata,
+          FUN = function(x) {c(mean = mean(x),
+                               se = sd(x) / sqrt(length(x)))})
+
+```
+
+This difference is looking quite significant.
+
+Let's visualize it.
+```{r}
+# Density plots
+qplot(fill = gender, 
+      x = score1, 
+      data = sdata, 
+      geom = "density",
+      alpha = I(0.5),
+      adjust = 2
+      )
+```
+
+Let's check if the populations have the same variance.
+```{r}
+
+x <- subset(sdata, gender=="Male")$score1
+y <- subset(sdata, gender=="Female")$score1
+var.test(x, y)
+```
+As p-value > 0.05, the null hypothesis is not rejected and the variances are equal.  
+  
+Checking assumptions:
+  The two samples are random and independent.
+  As the sample size is large enough, normality is not important.
+  The variances are equal.
+
+```{r}
+t.test(x=x, y=y, alternative = "two.sided", var.equal = TRUE,
+       conf.level = 0.95)
+```
+
+As p-value < 0.05, the null hypothesis is rejected.
+We can conclude that there is statistically significant difference between male and female students score1.
+
+```{r}
+rm(sdata, x, y)
+```
+
+#### 6. (10p) Create a two sample hypothesis to compare mean salaries of the students graduated from "political sciences" and "economics and finance". Test it in 95% confidence level.
+
+To start, it always helps to plot things!!!
+```{r}
+# Get subset of students who have salary
+sdata <- subset(students, !is.na(salary))
+sdata <- subset(sdata, major=="Political Science" | major=="Economics and Finance")
+
+# Create boxplot showing how salary varies based on major
+qplot(x = major, y = salary,
+      geom = "boxplot", data = sdata,
+      xlab = "Major",
+      ylab = "Salary",
+      fill = I("lightblue"))
+```
+
+This plot suggests that Major is associated with Salary.
+
+Let's compute a summary table
+```{r}
+aggregate(salary ~ major, 
+          data = sdata,
+          FUN = function(x) {c(mean = mean(x),
+                               se = sd(x) / sqrt(length(x)))})
+
+```
+
+This difference is looking quite significant.
+
+Let's visualize it.
+```{r}
+# Density plots
+qplot(fill = major, 
+      x = salary, 
+      data = sdata, 
+      geom = "density",
+      alpha = I(0.5),
+      adjust = 2
+      )
+```
+
+Let's check if the populations have the same variance.
+```{r}
+
+x <- subset(sdata, major=="Political Science")$salary
+y <- subset(sdata, major=="Economics and Finance")$salary
+var.test(x, y)
+```
+As p-value > 0.05, the null hypothesis is not rejected and the variances are accepted as equal.
+  
+Checking assumptions:
+  The two samples are random and independent.
+  As the sample size is large enough, normality is not important.
+  The variances are accepted as equal.
+
+```{r}
+t.test(x=x, y=y, alternative = "two.sided", var.equal = TRUE,
+       conf.level = 0.95)
+```
+
+As p-value < 0.05, the null hypothesis is rejected.
+We can conclude that there is statistically significant difference between "Political science" and "Economics and Finance" students salary.
+
+```{r echo=FALSE}
+rm(sdata, x, y)
+```
+
+#### 7. (20p) Create working functions requested in RLecture4 page 7-8. Implement and demonstrate them using above dataset.
+
+Correlation analyzer function is implemented and used above.
+Missing Value Replacer with 10% trimmed mean function is implemented and used below.
+
+```{r}
+missingValueReplacer <- function(vector, trim=0.10){
+  temp <- subset(vector, !is.na(vector))
+  temp <- sort(temp)
+  len <- length(temp)
+  start <- round(len * trim + 1)
+  end <- len - (start - 1)
+  s <- 0
+  for (i in start:end) {
+    s <- s + temp[i]
+  }
+  average = s/(end-start + 1)
+  
+  for(i in 1:length(vector)) {
+    if(is.na(vector[i])){
+      vector[i] <- average
+    }
+  }
+  
+  vector
+}
+
+as.data.frame(head(students$salary, 20))
+
+boxplot(students$salary)
+
+```
+
+Now let's see the above data and boxplot after applying missing value replacer function.
+
+```{r}
+students$salary <- missingValueReplacer(students$salary)
+as.data.frame(head(students$salary, 20))
+boxplot(students$salary)

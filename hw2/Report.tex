@@ -1,0 +1,830 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={Students Data Analysis},
+  pdfauthor={Hasibullah Mahmood},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+
+\title{Students Data Analysis}
+\author{Hasibullah Mahmood}
+\date{April 2, 2020}
+
+\begin{document}
+\maketitle
+
+\hypertarget{import-the-relevant-libraries}{%
+\subsection{Import the relevant
+libraries}\label{import-the-relevant-libraries}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(ggplot2)}
+\KeywordTok{library}\NormalTok{(gridExtra)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{load-the-data}{%
+\subsection{Load the data}\label{load-the-data}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{students <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"students.csv"}\NormalTok{)}
+\KeywordTok{attach}\NormalTok{(students)}
+\KeywordTok{head}\NormalTok{(students)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   stud.id                name gender age height weight   religion nc.score
+## 1  833917 Gonzales, Christina Female  19    160   64.8     Muslim     1.91
+## 2  898539      Lozano, T'Hani Female  19    172   73.0      Other     1.56
+## 3  379678      Williams, Hanh Female  22    168   70.6 Protestant     1.24
+## 4  807564         Nem, Denzel   Male  19    183   79.7      Other     1.37
+## 5  383291     Powell, Heather Female  21    175   71.4   Catholic     1.46
+## 6  256074      Perez, Jadrian   Male  19    189   85.8   Catholic     1.34
+##   semester                  major                      minor score1 score2
+## 1      1st      Political Science            Social Sciences     NA     NA
+## 2      2nd        Social Sciences Mathematics and Statistics     NA     NA
+## 3      3rd        Social Sciences Mathematics and Statistics     45     46
+## 4      2nd Environmental Sciences Mathematics and Statistics     NA     NA
+## 5      1st Environmental Sciences Mathematics and Statistics     NA     NA
+## 6      2nd      Political Science Mathematics and Statistics     NA     NA
+##   online.tutorial graduated salary
+## 1               0         0     NA
+## 2               0         0     NA
+## 3               0         0     NA
+## 4               0         0     NA
+## 5               0         0     NA
+## 6               0         0     NA
+\end{verbatim}
+
+\hypertarget{some-basic-analysis}{%
+\subsection{Some basic analysis}\label{some-basic-analysis}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{cat}\NormalTok{(}\StringTok{"Total number of Variables:"}\NormalTok{, }\KeywordTok{length}\NormalTok{(students), }
+    \StringTok{"}\CharTok{\textbackslash{}n}\StringTok{Total number of students:"}\NormalTok{, }\KeywordTok{length}\NormalTok{(stud.id))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Total number of Variables: 16 
+## Total number of students: 8239
+\end{verbatim}
+
+\hypertarget{checking-summary-of-gender}{%
+\paragraph{Checking summary of
+gender}\label{checking-summary-of-gender}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{summary}\NormalTok{(gender)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Female   Male 
+##   4110   4129
+\end{verbatim}
+
+\hypertarget{analyzing-students-age}{%
+\paragraph{Analyzing Students Age}\label{analyzing-students-age}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{summary}\NormalTok{(age)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##   18.00   20.00   21.00   22.54   23.00   64.00
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data=}\NormalTok{students, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{students}\OperatorTok{$}\NormalTok{age)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_histogram}\NormalTok{(}\DataTypeTok{binwidth=}\DecValTok{1}\NormalTok{, }\DataTypeTok{col=}\StringTok{"red"}\NormalTok{, }\DataTypeTok{fill=}\StringTok{"green"}\NormalTok{, }\DataTypeTok{alpha=}\FloatTok{0.7}\NormalTok{)}\OperatorTok{+}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title =} \StringTok{"Students Age"}\NormalTok{, }\DataTypeTok{x=}\StringTok{"Age"}\NormalTok{, }\DataTypeTok{y=}\StringTok{"Count"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Report_files/figure-latex/unnamed-chunk-5-1.pdf}
+
+The above figure shows most of students are between 18-25 years old.
+
+\hypertarget{analyzing-students-height}{%
+\paragraph{Analyzing Students Height}\label{analyzing-students-height}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggplot}\NormalTok{(students, }\KeywordTok{aes}\NormalTok{(students}\OperatorTok{$}\NormalTok{height, }\DataTypeTok{fill=}\NormalTok{gender)) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_histogram}\NormalTok{(}\DataTypeTok{position=}\StringTok{"identity"}\NormalTok{, }\DataTypeTok{colour=}\StringTok{"grey40"}\NormalTok{, }\DataTypeTok{binwidth=}\DecValTok{5}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{facet_grid}\NormalTok{(gender }\OperatorTok{~}\StringTok{ }\NormalTok{.) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{ggtitle}\NormalTok{(}\StringTok{"Male height vs Female height"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{xlab}\NormalTok{(}\StringTok{"Height"}\NormalTok{) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{ylab}\NormalTok{(}\StringTok{"Count"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Report_files/figure-latex/unnamed-chunk-6-1.pdf}
+
+Students height looks to be symmetric normal distribution, but in order
+to be sure enough we will use qqnorm and qqline functions.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{qqnorm}\NormalTok{(students}\OperatorTok{$}\NormalTok{height, }\DataTypeTok{main=}\StringTok{"Q-Q plot for students height"}\NormalTok{)}
+\KeywordTok{qqline}\NormalTok{(students}\OperatorTok{$}\NormalTok{height, }\DataTypeTok{col=}\DecValTok{3}\NormalTok{, }\DataTypeTok{lwd=}\DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Report_files/figure-latex/unnamed-chunk-7-1.pdf}
+
+By examining the plot we can see there is divergence in upper tail and
+lower tail of the graph, so we will examine it further by taking the
+subset of data in to male and female.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{males <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(students, gender}\OperatorTok{==}\StringTok{"Male"}\NormalTok{)}
+\NormalTok{females <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(students, gender}\OperatorTok{==}\StringTok{"Female"}\NormalTok{)}
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{mfrow=}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{))}
+\KeywordTok{qqnorm}\NormalTok{(males}\OperatorTok{$}\NormalTok{height, }\DataTypeTok{main=}\StringTok{"Q-Q plot for males height"}\NormalTok{)}
+\KeywordTok{qqline}\NormalTok{(males}\OperatorTok{$}\NormalTok{height, }\DataTypeTok{col=}\DecValTok{3}\NormalTok{, }\DataTypeTok{lwd=}\DecValTok{2}\NormalTok{)}
+
+\KeywordTok{qqnorm}\NormalTok{(females}\OperatorTok{$}\NormalTok{height, }\DataTypeTok{main=}\StringTok{"Q-Q plot for females height"}\NormalTok{)}
+\KeywordTok{qqline}\NormalTok{(females}\OperatorTok{$}\NormalTok{height, }\DataTypeTok{col=}\DecValTok{3}\NormalTok{, }\DataTypeTok{lwd=}\DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Report_files/figure-latex/unnamed-chunk-8-1.pdf}
+
+Now we are sure that the height of male and female students are
+symmetric normal distribution, for better understanding We will have a
+look at summary and the standard deviation of student's heights.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{summary}\NormalTok{(males}\OperatorTok{$}\NormalTok{height)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##   144.0   174.0   179.0   179.1   184.0   206.0
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{sd}\NormalTok{(males}\OperatorTok{$}\NormalTok{height)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 7.988852
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{summary}\NormalTok{(females}\OperatorTok{$}\NormalTok{height)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##   135.0   158.0   164.0   163.7   169.0   193.0
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{sd}\NormalTok{(females}\OperatorTok{$}\NormalTok{height)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 7.919726
+\end{verbatim}
+
+We can use boxplot in order to check if there is any outlier or not.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data=}\NormalTok{students, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{students}\OperatorTok{$}\NormalTok{gender, }\DataTypeTok{y=}\NormalTok{students}\OperatorTok{$}\NormalTok{height, }\DataTypeTok{fill=}\NormalTok{students}\OperatorTok{$}\NormalTok{gender)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_boxplot}\NormalTok{() }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title =} \StringTok{"Male and Female height boxplot"}\NormalTok{, }\DataTypeTok{x =} \StringTok{"Gender"}\NormalTok{, }\DataTypeTok{y=}\StringTok{"Height"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{stat_summary}\NormalTok{(}\DataTypeTok{fun.y=}\NormalTok{mean, }\DataTypeTok{geom=}\StringTok{"point"}\NormalTok{, }\DataTypeTok{shape=}\DecValTok{4}\NormalTok{, }\DataTypeTok{size=}\DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Report_files/figure-latex/unnamed-chunk-10-1.pdf}
+
+The above boxplot shows there are outliers both in male and female
+students height.
+
+\hypertarget{analyzing-students-weight}{%
+\paragraph{Analyzing Students Weight}\label{analyzing-students-weight}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{summary}\NormalTok{(males}\OperatorTok{$}\NormalTok{weight)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##   56.90   73.20   77.90   78.59   83.20  116.00
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{summary}\NormalTok{(females}\OperatorTok{$}\NormalTok{weight)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##   51.40   63.70   67.00   67.38   70.60   93.80
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggplot}\NormalTok{(students, }\KeywordTok{aes}\NormalTok{(students}\OperatorTok{$}\NormalTok{weight, }\DataTypeTok{fill=}\NormalTok{gender)) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_histogram}\NormalTok{(}\DataTypeTok{position=}\StringTok{"identity"}\NormalTok{, }\DataTypeTok{colour=}\StringTok{"grey40"}\NormalTok{, }\DataTypeTok{binwidth=}\DecValTok{5}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{facet_grid}\NormalTok{(gender }\OperatorTok{~}\StringTok{ }\NormalTok{.) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{ggtitle}\NormalTok{(}\StringTok{"Male weight vs Female weight"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{xlab}\NormalTok{(}\StringTok{"Weight"}\NormalTok{) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{ylab}\NormalTok{(}\StringTok{"Count"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Report_files/figure-latex/unnamed-chunk-11-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{mfrow=}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{))}
+\KeywordTok{qqnorm}\NormalTok{(males}\OperatorTok{$}\NormalTok{weight, }\DataTypeTok{main=}\StringTok{"Q-Q plot for males weight"}\NormalTok{)}
+\KeywordTok{qqline}\NormalTok{(males}\OperatorTok{$}\NormalTok{weight, }\DataTypeTok{col=}\DecValTok{3}\NormalTok{, }\DataTypeTok{lwd=}\DecValTok{2}\NormalTok{)}
+
+\KeywordTok{qqnorm}\NormalTok{(females}\OperatorTok{$}\NormalTok{weight, }\DataTypeTok{main=}\StringTok{"Q-Q plot for females weight"}\NormalTok{)}
+\KeywordTok{qqline}\NormalTok{(females}\OperatorTok{$}\NormalTok{weight, }\DataTypeTok{col=}\DecValTok{3}\NormalTok{, }\DataTypeTok{lwd=}\DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Report_files/figure-latex/unnamed-chunk-11-2.pdf}
+
+The above histogram and Q-Q plot shows students weight are roughly
+symmetric.
+
+\hypertarget{analyzing-students-religion}{%
+\paragraph{Analyzing student's
+religion}\label{analyzing-students-religion}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{summary}\NormalTok{(religion)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   Catholic     Muslim   Orthodox      Other Protestant 
+##       2797        330        585       2688       1839
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggplot}\NormalTok{(students, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{religion, }\DataTypeTok{fill=}\NormalTok{religion))}\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_bar}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{y =}\NormalTok{ (..count..)}\OperatorTok{/}\KeywordTok{sum}\NormalTok{(..count..))) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title =} \StringTok{"Students religion BarChart"}\NormalTok{,}\DataTypeTok{x=} \StringTok{"Religion"}\NormalTok{,}\DataTypeTok{y=} \StringTok{"Count"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Report_files/figure-latex/unnamed-chunk-12-1.pdf}
+
+Catholic religion has the most followers between students.
+
+\hypertarget{analyzing-students-nc.score}{%
+\paragraph{Analyzing student's
+nc.Score}\label{analyzing-students-nc.score}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{summary}\NormalTok{(nc.score)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##   1.000   1.460   2.040   2.166   2.780   4.000
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{plot1 <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(students, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{nc.score)) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_histogram}\NormalTok{(}\DataTypeTok{binwidth =} \FloatTok{0.2}\NormalTok{, }\DataTypeTok{colour=}\StringTok{"white"}\NormalTok{, }\DataTypeTok{fill=}\StringTok{"#28a745"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title =} \StringTok{"Students nc.score"}\NormalTok{, }\DataTypeTok{x=}\StringTok{"NC.score"}\NormalTok{, }\DataTypeTok{y=}\StringTok{"Count"}\NormalTok{)}
+
+\NormalTok{plot2 <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data=}\NormalTok{students, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{students}\OperatorTok{$}\NormalTok{gender, }\DataTypeTok{y=}\NormalTok{students}\OperatorTok{$}\NormalTok{nc.score, }\DataTypeTok{fill=}\NormalTok{students}\OperatorTok{$}\NormalTok{gender)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_boxplot}\NormalTok{() }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title =} \StringTok{"Male and Female nc.score boxplot"}\NormalTok{, }\DataTypeTok{x =} \StringTok{"Gender"}\NormalTok{, }\DataTypeTok{y=}\StringTok{"NC.Score"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{stat_summary}\NormalTok{(}\DataTypeTok{fun.y=}\NormalTok{mean, }\DataTypeTok{geom=}\StringTok{"point"}\NormalTok{, }\DataTypeTok{shape=}\DecValTok{4}\NormalTok{, }\DataTypeTok{size=}\DecValTok{2}\NormalTok{)}
+
+\KeywordTok{grid.arrange}\NormalTok{(plot1, plot2, }\DataTypeTok{ncol=}\DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Report_files/figure-latex/unnamed-chunk-13-1.pdf}
+
+Students nc.score is asymmetric and skewed to the right
+
+\hypertarget{analyzing-students-semester}{%
+\paragraph{Analyzing student's
+Semester}\label{analyzing-students-semester}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{summary}\NormalTok{(semester)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## >6th  1st  2nd  3rd  4th  5th  6th 
+##  303 1709 1638 1641 1368  876  704
+\end{verbatim}
+
+The summary of semester shows there is a problem in data, the 6th
+semester is written in two ways ``\textgreater6th'' and ``6th''.\\
+The problem can be solved by the following code:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{students}\OperatorTok{$}\NormalTok{semester[students}\OperatorTok{$}\NormalTok{semester }\OperatorTok{==}\StringTok{ ">6th"}\NormalTok{] <-}\StringTok{ "6th"}
+\KeywordTok{summary}\NormalTok{(students}\OperatorTok{$}\NormalTok{semester)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## >6th  1st  2nd  3rd  4th  5th  6th 
+##    0 1709 1638 1641 1368  876 1007
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggplot}\NormalTok{(students, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{semester, }\DataTypeTok{fill=}\NormalTok{gender))}\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_bar}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{y =}\NormalTok{ (..count..)}\OperatorTok{/}\KeywordTok{sum}\NormalTok{(..count..))) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title =} \StringTok{"Students Semester BarChart"}\NormalTok{,}\DataTypeTok{x=} \StringTok{"Semester"}\NormalTok{,}\DataTypeTok{y=} \StringTok{"Ratio"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Report_files/figure-latex/unnamed-chunk-15-1.pdf}
+
+The above Barchart shows more than 60\% of students are in 1st, 2nd and
+3rd semesters.
+
+\hypertarget{analyzing-students-major}{%
+\paragraph{Analyzing student's Major}\label{analyzing-students-major}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{summary}\NormalTok{(students}\OperatorTok{$}\NormalTok{major)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                    Biology      Economics and Finance 
+##                       1597                       1324 
+##     Environmental Sciences Mathematics and Statistics 
+##                       1626                       1225 
+##          Political Science            Social Sciences 
+##                       1455                       1012
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggplot}\NormalTok{(students, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{major, }\DataTypeTok{fill=}\NormalTok{gender))}\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_bar}\NormalTok{() }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title =} \StringTok{"Students major BarChart"}\NormalTok{,}\DataTypeTok{x=} \StringTok{"Major"}\NormalTok{,}\DataTypeTok{y=} \StringTok{"Count"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{axis.text.x=}\KeywordTok{element_text}\NormalTok{(}\DataTypeTok{angle=}\OperatorTok{-}\DecValTok{45}\NormalTok{,}\DataTypeTok{hjust=}\DecValTok{0}\NormalTok{,}\DataTypeTok{vjust=}\DecValTok{0}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Report_files/figure-latex/unnamed-chunk-16-1.pdf}
+
+From above graph one can easily conclude that Environmental science and
+Biology faculties have the most students among other, also females are
+more than males in Biology and Political science faculties and males are
+more than females in `Economics and Finance' and `Mathematics and
+statistics' faculties and \ldots{}
+
+\hypertarget{analyzing-students-minor}{%
+\paragraph{Analyzing student's Minor}\label{analyzing-students-minor}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{summary}\NormalTok{(students}\OperatorTok{$}\NormalTok{minor)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                    Biology      Economics and Finance 
+##                       1318                       1382 
+##     Environmental Sciences Mathematics and Statistics 
+##                       1318                       1446 
+##          Political Science            Social Sciences 
+##                       1387                       1388
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggplot}\NormalTok{(students, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{minor, }\DataTypeTok{fill=}\NormalTok{gender))}\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_bar}\NormalTok{() }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title =} \StringTok{"Students Minor BarChart"}\NormalTok{,}\DataTypeTok{x=} \StringTok{"Minor"}\NormalTok{,}\DataTypeTok{y=} \StringTok{"Count"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{axis.text.x=}\KeywordTok{element_text}\NormalTok{(}\DataTypeTok{angle=}\OperatorTok{-}\DecValTok{45}\NormalTok{,}\DataTypeTok{hjust=}\DecValTok{0}\NormalTok{,}\DataTypeTok{vjust=}\DecValTok{0}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Report_files/figure-latex/unnamed-chunk-17-1.pdf}
+
+The above Barchart shows Students are uniformly distributed.
+
+\hypertarget{analyzing-students-score1}{%
+\paragraph{Analyzing student's Score1}\label{analyzing-students-score1}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{summary}\NormalTok{(students}\OperatorTok{$}\NormalTok{score1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+##   30.00   58.00   70.00   68.17   78.00   97.00    3347
+\end{verbatim}
+
+The above summary shows there are 3347 Empty cells for score1.
+Therefore, I will take subset of students based on their major for
+better analyzing.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{students.math <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(students, major}\OperatorTok{==}\StringTok{"Mathematics and Statistics"}\NormalTok{)}
+\KeywordTok{cat}\NormalTok{(}\StringTok{"Number of students in Mathematics and Statistics faculty:"}\NormalTok{,}\KeywordTok{length}\NormalTok{(students.math[,}\DecValTok{1}\NormalTok{]))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Number of students in Mathematics and Statistics faculty: 1225
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{cat}\NormalTok{(}\StringTok{"Number of students who do not have score1:"}\NormalTok{,}\KeywordTok{length}\NormalTok{(students.math}\OperatorTok{$}\NormalTok{score1[}\KeywordTok{is.na}\NormalTok{(students.math}\OperatorTok{$}\NormalTok{score1)]))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Number of students who do not have score1: 478
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{cat}\NormalTok{(}\StringTok{"Number of students who have score1:"}\NormalTok{,}\KeywordTok{length}\NormalTok{(students.math}\OperatorTok{$}\NormalTok{score1[}\OperatorTok{!}\KeywordTok{is.na}\NormalTok{(students.math}\OperatorTok{$}\NormalTok{score1)]))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Number of students who have score1: 747
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{summary}\NormalTok{(students.math}\OperatorTok{$}\NormalTok{score1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+##   78.00   86.00   88.00   88.09   90.00   97.00     478
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggplot}\NormalTok{(students.math, }\KeywordTok{aes}\NormalTok{(students.math}\OperatorTok{$}\NormalTok{score1, }\DataTypeTok{fill=}\NormalTok{students.math}\OperatorTok{$}\NormalTok{gender)) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_histogram}\NormalTok{(}\DataTypeTok{position=}\StringTok{"identity"}\NormalTok{, }\DataTypeTok{colour=}\StringTok{"grey40"}\NormalTok{, }\DataTypeTok{binwidth=}\DecValTok{2}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{facet_grid}\NormalTok{(students.math}\OperatorTok{$}\NormalTok{gender }\OperatorTok{~}\StringTok{ }\NormalTok{.)}\OperatorTok{+}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title=}\StringTok{"Math students score1 histogram"}\NormalTok{, }\DataTypeTok{x =}\StringTok{"score1"}\NormalTok{, }\DataTypeTok{y=}\StringTok{"Count"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: Removed 478 rows containing non-finite values (stat_bin).
+\end{verbatim}
+
+\includegraphics{Report_files/figure-latex/unnamed-chunk-19-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{mfrow=}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{))}
+\KeywordTok{qqnorm}\NormalTok{(students.math}\OperatorTok{$}\NormalTok{score1[students.math}\OperatorTok{$}\NormalTok{gender}\OperatorTok{==}\StringTok{"Male"}\NormalTok{],}
+       \DataTypeTok{main=}\StringTok{"Math male students score1"}\NormalTok{)}
+\KeywordTok{qqline}\NormalTok{(students.math}\OperatorTok{$}\NormalTok{score1[students.math}\OperatorTok{$}\NormalTok{gender}\OperatorTok{==}\StringTok{"Male"}\NormalTok{], }\DataTypeTok{col=}\DecValTok{3}\NormalTok{, }\DataTypeTok{lwd=}\DecValTok{2}\NormalTok{)}
+
+\KeywordTok{qqnorm}\NormalTok{(students.math}\OperatorTok{$}\NormalTok{score1[students.math}\OperatorTok{$}\NormalTok{gender}\OperatorTok{==}\StringTok{"Female"}\NormalTok{],}
+       \DataTypeTok{main=}\StringTok{"Math female students score1"}\NormalTok{)}
+\KeywordTok{qqline}\NormalTok{(students.math}\OperatorTok{$}\NormalTok{score1[students.math}\OperatorTok{$}\NormalTok{gender}\OperatorTok{==}\StringTok{"Female"}\NormalTok{], }\DataTypeTok{col=}\DecValTok{3}\NormalTok{, }\DataTypeTok{lwd=}\DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Report_files/figure-latex/unnamed-chunk-19-2.pdf}
+
+The above histogram and Q-Q plot shows students score1 is roughly
+symmetric and great portion of student's score1 lies between 83-91.
+
+\hypertarget{analyzing-students-graduated-variable}{%
+\paragraph{Analyzing student's graduated
+variable}\label{analyzing-students-graduated-variable}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{table}\NormalTok{(graduated)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## graduated
+##    0    1 
+## 6486 1753
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggplot}\NormalTok{(students, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\KeywordTok{as.factor}\NormalTok{(graduated), }\DataTypeTok{fill=}\NormalTok{gender))}\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_bar}\NormalTok{() }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title =} \StringTok{"Students graduated variable BarChart"}\NormalTok{,}\DataTypeTok{x=} \StringTok{"Graduated"}\NormalTok{,}\DataTypeTok{y=} \StringTok{"Count"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Report_files/figure-latex/unnamed-chunk-20-1.pdf}
+
+The above Barchart shows most of graduated students are male and most of
+students who are still studying are females.
+
+\hypertarget{analyzing-students-salary-variable}{%
+\paragraph{Analyzing student's Salary
+Variable}\label{analyzing-students-salary-variable}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{summary}\NormalTok{(salary)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+##   11444   35207   41672   42522   49373   75597    6486
+\end{verbatim}
+
+The summary shows there are 6486 rows in Salary variable which are
+empty. I will take the subset of students who have salary and I will
+plot the histogram, density histogram and qqplot of salary for further
+analyzing.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{students.salary <-}\StringTok{ }\NormalTok{students[}\OperatorTok{!}\KeywordTok{is.na}\NormalTok{(students}\OperatorTok{$}\NormalTok{salary),]}
+
+\CommentTok{# Set desired binwidth and number of non-missing obs}
+\NormalTok{bw =}\StringTok{ }\DecValTok{5000}
+\NormalTok{n_obs =}\StringTok{ }\KeywordTok{sum}\NormalTok{(}\OperatorTok{!}\KeywordTok{is.na}\NormalTok{(students.salary}\OperatorTok{$}\NormalTok{salary))}
+
+\NormalTok{g <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(students.salary, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{salary)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_histogram}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{y=}\NormalTok{..density..), }\DataTypeTok{binwidth =}\NormalTok{ bw, }\DataTypeTok{colour=}\StringTok{"black"}\NormalTok{, }\DataTypeTok{fill=}\StringTok{"green"}\NormalTok{)}\OperatorTok{+}
+\StringTok{  }\KeywordTok{stat_function}\NormalTok{(}\DataTypeTok{fun=}\NormalTok{dnorm, }\DataTypeTok{args =} \KeywordTok{list}\NormalTok{(}\DataTypeTok{mean =} \KeywordTok{mean}\NormalTok{(students.salary}\OperatorTok{$}\NormalTok{salary), }\DataTypeTok{sd =} \KeywordTok{sd}\NormalTok{(students.salary}\OperatorTok{$}\NormalTok{salary))) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{ggtitle}\NormalTok{(}\StringTok{"Students Salary Histogram and Normal Distribution"}\NormalTok{)}
+
+
+\NormalTok{ybreaks =}\StringTok{ }\KeywordTok{seq}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{350}\NormalTok{,}\DecValTok{50}\NormalTok{)}
+
+\CommentTok{## On primary axis and secondary axix}
+\NormalTok{g }\OperatorTok{+}\StringTok{ }\KeywordTok{scale_y_continuous}\NormalTok{(}\StringTok{"Counts"}\NormalTok{, }\DataTypeTok{breaks =} \KeywordTok{round}\NormalTok{(ybreaks }\OperatorTok{/}\StringTok{ }\NormalTok{(bw }\OperatorTok{*}\StringTok{ }\NormalTok{n_obs),}\DecValTok{3}\NormalTok{), }\DataTypeTok{labels =}\NormalTok{ ybreaks) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{scale_y_continuous}\NormalTok{(}\StringTok{"Density"}\NormalTok{, }\DataTypeTok{sec.axis =} \KeywordTok{sec_axis}\NormalTok{(}
+  \DataTypeTok{trans =} \OperatorTok{~}\StringTok{ }\NormalTok{. }\OperatorTok{*}\StringTok{ }\NormalTok{bw }\OperatorTok{*}\StringTok{ }\NormalTok{n_obs, }\DataTypeTok{name =} \StringTok{"Counts"}\NormalTok{, }\DataTypeTok{breaks =}\NormalTok{ ybreaks))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Report_files/figure-latex/unnamed-chunk-22-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{qqnorm}\NormalTok{(students.salary}\OperatorTok{$}\NormalTok{salary, }\DataTypeTok{main =} \StringTok{"Q-Q Plot of Students Salary"}\NormalTok{)}
+\KeywordTok{qqline}\NormalTok{(students.salary}\OperatorTok{$}\NormalTok{salary, }\DataTypeTok{col=}\DecValTok{3}\NormalTok{, }\DataTypeTok{lwd=}\DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Report_files/figure-latex/unnamed-chunk-22-2.pdf}
+
+Students salary is symmetrically distributed and great portion of
+students salary lies between 40K-57K.
+
+\hypertarget{analyzing-correlation-between-students-n.score-and-salary}{%
+\paragraph{Analyzing correlation between Student's n.score and
+salary}\label{analyzing-correlation-between-students-n.score-and-salary}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# define function}
+\NormalTok{correlation.analyzer <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(data, x, y) \{}
+  \KeywordTok{print}\NormalTok{(}
+    \KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ data, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ x, }\DataTypeTok{y =}\NormalTok{ y)) }\OperatorTok{+}
+\StringTok{      }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{color =} \StringTok{'blue'}\NormalTok{) }\OperatorTok{+}
+\StringTok{      }\KeywordTok{geom_smooth}\NormalTok{(}
+        \DataTypeTok{method =}\NormalTok{ lm,}
+\NormalTok{        se}
+\NormalTok{        =}\StringTok{ }\OtherTok{FALSE}\NormalTok{,}
+        \DataTypeTok{fullrange =} \OtherTok{TRUE}\NormalTok{,}
+        \DataTypeTok{col =} \StringTok{"#C42126"}
+\NormalTok{      )}
+\NormalTok{  )}
+  
+\NormalTok{  cor.val <-}\StringTok{ }\KeywordTok{cor}\NormalTok{(x, y, }\DataTypeTok{method =} \StringTok{'pearson'}\NormalTok{)}
+  \ControlFlowTok{if}\NormalTok{ (cor.val }\OperatorTok{>}\StringTok{ }\FloatTok{0.7}\NormalTok{) \{}
+\NormalTok{    result <-}\StringTok{ "Strong Positive Relationship"}
+\NormalTok{  \} }\ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (cor.val }\OperatorTok{>}\StringTok{ }\FloatTok{0.3}\NormalTok{) \{}
+\NormalTok{    result <-}\StringTok{ "Moderate Positive Relationship"}
+\NormalTok{  \} }\ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (cor.val }\OperatorTok{>}\StringTok{ }\DecValTok{0}\NormalTok{) \{}
+\NormalTok{    result <-}\StringTok{ "Weak Positive Relationship"}
+\NormalTok{  \} }\ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (cor.val }\OperatorTok{>}\StringTok{ }\FloatTok{-0.3}\NormalTok{) \{}
+\NormalTok{    result <-}\StringTok{ "Weak Negative Relationship"}
+\NormalTok{  \} }\ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (cor.val }\OperatorTok{>}\StringTok{ }\FloatTok{-0.7}\NormalTok{) \{}
+\NormalTok{    result <-}\StringTok{ "Moderate Negative Relationship"}
+\NormalTok{  \} }\ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (cor.val }\OperatorTok{>=}\StringTok{ }\DecValTok{-1}\NormalTok{) \{}
+\NormalTok{    result <-}\StringTok{ "Strong Negative Relationship"}
+\NormalTok{  \}}
+  \KeywordTok{return}\NormalTok{(}\KeywordTok{cat}\NormalTok{(}
+    \KeywordTok{paste}\NormalTok{(}
+      \StringTok{" The Correlation Coefficient: "}\NormalTok{,}
+\NormalTok{      cor.val,}
+      \StringTok{"}\CharTok{\textbackslash{}n}\StringTok{"}\NormalTok{,}
+      \StringTok{"Evaluation Result: "}\NormalTok{,}
+\NormalTok{      result,}
+      \StringTok{"}\CharTok{\textbackslash{}n}\StringTok{"}\NormalTok{,}
+      \DataTypeTok{sep =} \StringTok{" "}
+\NormalTok{    )}
+\NormalTok{  ))}
+\NormalTok{\}}
+
+
+\KeywordTok{correlation.analyzer}\NormalTok{(students.salary, }
+\NormalTok{                     students.salary}\OperatorTok{$}\NormalTok{nc.score, }
+\NormalTok{                     students.salary}\OperatorTok{$}\NormalTok{salary}
+\NormalTok{                     )}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Report_files/figure-latex/unnamed-chunk-23-1.pdf}
+
+\begin{verbatim}
+##  The Correlation Coefficient:  0.0189558417515911 
+##  Evaluation Result:  Weak Positive Relationship
+\end{verbatim}
+
+The figure shows there is no correlation between students n.score and
+salary.
+
+\hypertarget{analyzing-correlation-between-students-score1-and-salary}{%
+\paragraph{Analyzing correlation between Student's score1 and
+salary}\label{analyzing-correlation-between-students-score1-and-salary}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{correlation.analyzer}\NormalTok{(students.salary, }
+\NormalTok{                     students.salary}\OperatorTok{$}\NormalTok{score1, }
+\NormalTok{                     students.salary}\OperatorTok{$}\NormalTok{salary}
+\NormalTok{                     )}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Report_files/figure-latex/unnamed-chunk-24-1.pdf}
+
+\begin{verbatim}
+##  The Correlation Coefficient:  0.470997361701785 
+##  Evaluation Result:  Moderate Positive Relationship
+\end{verbatim}
+
+\hypertarget{analyzing-correlation-between-students-score2-and-salary}{%
+\paragraph{Analyzing correlation between Student's score2 and
+salary}\label{analyzing-correlation-between-students-score2-and-salary}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{correlation.analyzer}\NormalTok{(students.salary, }
+\NormalTok{                     students.salary}\OperatorTok{$}\NormalTok{score2, }
+\NormalTok{                     students.salary}\OperatorTok{$}\NormalTok{salary}
+\NormalTok{                     )}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Report_files/figure-latex/unnamed-chunk-25-1.pdf}
+
+\begin{verbatim}
+##  The Correlation Coefficient:  0.440388281182651 
+##  Evaluation Result:  Moderate Positive Relationship
+\end{verbatim}
+
+\end{document}
